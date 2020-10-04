@@ -47,7 +47,8 @@ Um das hier geschriebene Programm nutzen zu können müssen noch einige Anforder
     
 	![GPIO](https://workshop-iot-programming.devbit.be/assets/img/pinout_wiring_pi.56491fd7.png)
 	
-    * GPIO:BCM 19 Input Taster
+    * GPIO:BCM 19 Input Start Taster
+    * GPIO.BCM 27 Input Stopp Taster
     * GPIO.BCM 17 Output PWM Servo
     * GPIO.BCM 21 Input Lightsensor
     * GPIO.BCM 23 Output Grüne Led
