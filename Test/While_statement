@@ -1,0 +1,4 @@
+keep_going = True 
+while keep_going: 
+     ... 
+    keep_going = False 
