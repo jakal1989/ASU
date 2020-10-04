@@ -2,7 +2,7 @@
 Automatic Sim-Card Updater
 
 Das Tool wird verwendet um ein Servomotor zu steuern, der Automtisch eine SIMKarte aus einem ablagefach auswirft.
-Hierbei wird ein Taster als starter des Programms verwendet sowie ein Lichtsensor welcher erkennt ob eine SIMKarte im Fach ist.
+Hierbei wird ein Taster als starter des Programms verwendet sowie ein Lichtsensor welcher erkennt ob eine SIM-Karte im Fach ist.
 
 Um das hier geschriebene Programm nutzen zu können müssen noch einige Anforderungen erfült werden.
 
