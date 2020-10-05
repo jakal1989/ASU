@@ -155,18 +155,19 @@ class email:
     
 class rest:
     @staticmethod
-    def call():
+    def post():
         #Rest call als neue Klasse definieren
-        ###Rest get
-        #r =requests.get('https://xkcd.com/1906/')
-        ###Rest post
-        #pload = {'username':'Olivia','password':'123'}
-        #r = requests.post('https://httpbin.org/post',data = pload)
-        #print(r.text)
-        print ("Send rest request")
-        print ("wait of Rest Get |")
+        print ("Rest Post send")
+        url = "https://f910d01a-4731-411c-8275-ce56ded1ec7e.mock.pstmn.io/post/?ICCID=82816516156113284895152&Update=OK"
+        payload = {'ICCID': '82816516156113284895152','Update': 'OK'}
+        files = []
+        headers = {'SnowPOS': 'Online'}
+        response = requests.request("POST", url, headers=headers, data = payload, files = files)
+        print(response.text.encode('utf8'), file=open('Update_list.txt', 'a'))
+        now = datetime.datetime.now()
+        print (now.strftime("%Y-%m-%d %H:%M:%S"), file=open('Update_list.txt', 'a'))
+        print ("Rest Post saved answer in Upload_list")
         time.sleep(10)
-        print ("Recieved Rest Get *")
         
 class sim:
     @staticmethod    
