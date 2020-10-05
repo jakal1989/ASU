@@ -108,9 +108,9 @@ class email:
     def withsim():
         #Send Email with SIM
         print ("Send Email - Last SIM ejected")
-        smtpUser = 'asu.swisscom@gmail.com'
-        smtpPass = 'Swissc0m'
-        toAdd = 'stefano.cugis@gmail.com'
+        smtpUser = ''
+        smtpPass = ''
+        toAdd = ''
         fromAdd = smtpUser
         subject = 'ASU - INFO'
         header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
@@ -124,9 +124,9 @@ class email:
     def withoutsim():
         #Send Email without SIM
         print ("Send Email - no SIM in tray")
-        smtpUser = 'asu.swisscom@gmail.com'
-        smtpPass = 'Swissc0m'
-        toAdd = 'stefano.cugis@gmail.com'
+        smtpUser = ''
+        smtpPass = ''
+        toAdd = ''
         fromAdd = smtpUser
         subject = 'ASU - INFO'
         header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
@@ -140,9 +140,9 @@ class email:
     def handstop():
         #Send Email without SIM
         print ("Send Email - handstop")
-        smtpUser = 'asu.swisscom@gmail.com'
-        smtpPass = 'Swissc0m'
-        toAdd = 'stefano.cugis@gmail.com'
+        smtpUser = ''
+        smtpPass = ''
+        toAdd = ''
         fromAdd = smtpUser
         subject = 'ASU - ERROR'
         header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
