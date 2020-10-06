@@ -3,16 +3,21 @@
 #Import different libraries
 import RPi.GPIO as GPIO
 import time
-import smtplib
+import smtplib 
+from email.mime.multipart import MIMEMultipart 
+from email.mime.text import MIMEText 
+from email.mime.base import MIMEBase 
+from email import encoders
 import requests
 import sys
+import os
 import datetime
 
 #old_stdout = sys.stdout
-#log_file = open("ASU.log","w")
+#log_file = open("/home/pi/ASU/logs/ASU.log","a")
 #sys.stdout = log_file
-#now = datetime.datetime.now()
-#print (now.strftime("%Y-%m-%d %H:%M:%S"))
+
+now = datetime.datetime.now()
 
 
 GPIO.setwarnings(False)
@@ -106,27 +111,51 @@ class led:
 class email:
     @staticmethod
     def withsim():
+        print("Send E-Mail with Update List")
         #Send Email with SIM
-        print ("Send Email - Last SIM ejected")
-        smtpUser = ''
-        smtpPass = ''
-        toAdd = ''
-        fromAdd = smtpUser
-        subject = 'ASU - INFO'
-        header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
-        body = 'Automatic SIM Update Finished'
-        s = smtplib.SMTP('smtp.gmail.com',587)
-        s.ehlo()
-        s.starttls()
-        s.login(smtpUser, smtpPass)
-        s.sendmail(fromAdd, toAdd, header + '\n\n' + body)
+        fromaddr = "senderEMAIL"
+        toaddr = "empfängerEMAIL"
+        # instance of MIMEMultipart 
+        msg = MIMEMultipart() 
+        # storing the senders email address   
+        msg['From'] = fromaddr 
+        # storing the receivers email address  
+        msg['To'] = toaddr 
+        # storing the subject  
+        msg['Subject'] = "ASU - INFO"
+        # string to store the body of the mail 
+        body = "Automatic SIM Update Finished"
+        # attach the body with the msg instance 
+        msg.attach(MIMEText(body, 'plain')) 
+        # open the file to be sent
+        filename = "Update_list.txt"
+        attachment = open("/home/pi/ASU/Update_list.txt", "rb")
+        # instance of MIMEBase and named as p
+        p = MIMEBase('application', 'octet-stream')
+        # To change the payload into encoded form 
+        p.set_payload((attachment).read())
+        # encode into base64 
+        encoders.encode_base64(p) 
+        p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
+        # attach the instance 'p' to instance 'msg' 
+        msg.attach(p) 
+        # creates SMTP session 
+        s = smtplib.SMTP('smtp.gmail.com', 587) 
+        # start TLS for security 
+        s.starttls() 
+        # Authentication 
+        s.login(fromaddr, "passwort") 
+        # Converts the Multipart msg into a string 
+        text = msg.as_string() 
+        # sending the mail 
+        s.sendmail(fromaddr, toaddr, text)
     @staticmethod
     def withoutsim():
         #Send Email without SIM
         print ("Send Email - no SIM in tray")
-        smtpUser = ''
-        smtpPass = ''
-        toAdd = ''
+        smtpUser = 'senderEMAIL'
+        smtpPass = 'Passwort'
+        toAdd = 'empfängerEMAIL'
         fromAdd = smtpUser
         subject = 'ASU - INFO'
         header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
@@ -138,35 +167,59 @@ class email:
         s.sendmail(fromAdd, toAdd, header + '\n\n' + body)
     @staticmethod
     def handstop():
-        #Send Email without SIM
-        print ("Send Email - handstop")
-        smtpUser = ''
-        smtpPass = ''
-        toAdd = ''
-        fromAdd = smtpUser
-        subject = 'ASU - ERROR'
-        header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
-        body = 'ASU stoped by hand'
-        s = smtplib.SMTP('smtp.gmail.com',587)
-        s.ehlo()
-        s.starttls()
-        s.login(smtpUser, smtpPass)
-        s.sendmail(fromAdd, toAdd, header + '\n\n' + body)
+        print("Send E-Mail with Update List")
+        #Send Email with SIM
+        fromaddr = "senderEMAIL"
+        toaddr = "empfägerEMAIL"
+        # instance of MIMEMultipart 
+        msg = MIMEMultipart() 
+        # storing the senders email address   
+        msg['From'] = fromaddr 
+        # storing the receivers email address  
+        msg['To'] = toaddr 
+        # storing the subject  
+        msg['Subject'] = "ASU - ERROR"
+        # string to store the body of the mail 
+        body = "Automatic SIM-Card Updater stoped by Hand"
+        # attach the body with the msg instance 
+        msg.attach(MIMEText(body, 'plain')) 
+        # open the file to be sent
+        filename = "Update_list.txt"
+        attachment = open("/home/pi/ASU/Update_list.txt", "rb")
+        # instance of MIMEBase and named as p
+        p = MIMEBase('application', 'octet-stream')
+        # To change the payload into encoded form 
+        p.set_payload((attachment).read())
+        # encode into base64 
+        encoders.encode_base64(p) 
+        p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
+        # attach the instance 'p' to instance 'msg' 
+        msg.attach(p) 
+        # creates SMTP session 
+        s = smtplib.SMTP('smtp.gmail.com', 587) 
+        # start TLS for security 
+        s.starttls() 
+        # Authentication 
+        s.login(fromaddr, "Passwort") 
+        # Converts the Multipart msg into a string 
+        text = msg.as_string() 
+        # sending the mail 
+        s.sendmail(fromaddr, toaddr, text)
     
 class rest:
     @staticmethod
     def post():
         #Rest call als neue Klasse definieren
         print ("Rest Post send")
-        url = "https://f910d01a-4731-411c-8275-ce56ded1ec7e.mock.pstmn.io/post/?ICCID=82816516156113284895152&Update=OK"
-        payload = {'ICCID': '82816516156113284895152','Update': 'OK'}
+        now = datetime.datetime.now()
+        print (now.strftime("%Y-%m-%d %H:%M:%S"), file=open('Update_list.txt', 'a'))
+        url = "https://f910d01a-4731-411c-8275-ce56ded1ec7e.mock.pstmn.io/post/"
+        payload = {'Update': 'post'}
         files = []
         headers = {'SnowPOS': 'Online'}
         response = requests.request("POST", url, headers=headers, data = payload, files = files)
         print(response.text.encode('utf8'), file=open('Update_list.txt', 'a'))
-        now = datetime.datetime.now()
-        print (now.strftime("%Y-%m-%d %H:%M:%S"), file=open('Update_list.txt', 'a'))
-        print ("Rest Post saved answer in Upload_list")
+        print ("Rest Post saved answer in Update_list")
         time.sleep(10)
         
 class sim:
@@ -177,21 +230,35 @@ class sim:
         time.sleep(2)
         GPIO.output(11, GPIO.LOW)
         time.sleep(2)
+
+class file:
+    @staticmethod    
+    def delete():
+        print ("Delete Update list")
+        if os.path.exists("Update_list.txt"):
+          os.remove("Update_list.txt")
+        else:
+          print("The Update_list file does not exist")
+    
 	
 if GPIO.input(21) == 1:
-    #Loop
+    print (now.strftime("%Y-%m-%d %H:%M:%S"))
     motor.positioncheck()
+    file.delete()
     dark = True
+    #Loop
     while dark:
         if GPIO.input(21) == 1 and GPIO.input(27) == 0:
+            print (now.strftime("%Y-%m-%d %H:%M:%S"))
             led.green_on()
             motor.positioncheck()
             print ("SIM in tray")
             sim.read_on()
-            rest.call()
+            rest.post()
             motor.run()
             
         elif GPIO.input(21) == 1 and GPIO.input(27) == 1:
+            print (now.strftime("%Y-%m-%d %H:%M:%S"))
             print ("stoped by hand")
             led.green_off()
             led.red_on()
@@ -200,20 +267,24 @@ if GPIO.input(21) == 1:
             time.sleep(3)
             led.red_off()
             led.yellow_off()
+            file.delete()
             motor.stop()
             dark = False
             
         else:
             print ("All SIM-Cards ejected from tray")
+            print (now.strftime("%Y-%m-%d %H:%M:%S"))
             led.yellow_on()
             email.withsim()
             time.sleep(3)
             led.green_off()
             led.yellow_off()
+            file.delete()
             motor.stop()
             dark = False
 else:
     print ("No SIM-Card in tray")
+    print (now.strftime("%Y-%m-%d %H:%M:%S"))
     led.red_on()
     time.sleep(3)
     led.yellow_on()
@@ -223,6 +294,6 @@ else:
     led.yellow_off()
     GPIO.cleanup()
         
+    
 #sys.stdout = old_stdout
-
 #log_file.close()
