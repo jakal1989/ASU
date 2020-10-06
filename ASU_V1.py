@@ -129,7 +129,7 @@ class email:
         msg.attach(MIMEText(body, 'plain')) 
         # open the file to be sent
         filename = "Update_list.txt"
-        attachment = open("/home/pi/ASU/Update_list.txt", "rb")
+        attachment = open("Update_list.txt", "rb")
         # instance of MIMEBase and named as p
         p = MIMEBase('application', 'octet-stream')
         # To change the payload into encoded form 
@@ -185,7 +185,7 @@ class email:
         msg.attach(MIMEText(body, 'plain')) 
         # open the file to be sent
         filename = "Update_list.txt"
-        attachment = open("/home/pi/ASU/Update_list.txt", "rb")
+        attachment = open("Update_list.txt", "rb")
         # instance of MIMEBase and named as p
         p = MIMEBase('application', 'octet-stream')
         # To change the payload into encoded form 
