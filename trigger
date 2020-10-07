@@ -3,6 +3,7 @@
 # Logging arguments
 # -l oder --log -> Logging on
 DEBUG="1"
+
 if [ "$1" == "--log" ] || [ "$1" == "-l" ]
 then
   DEBUG="1"
@@ -12,7 +13,7 @@ fi
 #set path variable
 CURDIR=$(pwd)
 HOMEDIR=/home/pi/ASU
-LOGFILE=$HOMEDIR/logs/ASU.log
+LOGFILE=$HOMEDIR/logs/trigger.log
 
 # create log file if it does not exist
 if [ "$DEBUG" == "1" ]
@@ -22,7 +23,7 @@ then
   date +"%d.%m.%Y %T" >> $LOGFILE
 fi
 
-# Das Pin als Eingang definieren
+# define Pin as Input
 if [ "$DEBUG" == "1" ]
 then
 echo "Define GPIO" | tee -a $LOGFILE 
@@ -43,9 +44,9 @@ do
   # Wenn der Eingang von 0 auf 1 gewechselt hat
   if [ $pin -gt $previous ]
   then
-    # Start Motor_script
-    echo "Start Motor_script" | tee -a $LOGFILE 
-    sudo bash /home/pi/ASU/ASU_V1.py
+    # Start Automatic SIM Updater
+    echo "Trigger pessed ASU" | tee -a $LOGFILE 
+    sudo python3 $HOMEDIR/ASU_V1.py
   else
     # Eine halbe Sekunde schlafen, damit der Prozessor nicht heissläuft
     sleep 0.5
