@@ -13,46 +13,35 @@ import sys
 import os
 import datetime
 
-#old_stdout = sys.stdout
-#log_file = open("/home/pi/ASU/logs/ASU.log","a")
-#sys.stdout = log_file
+Debug = False #Turn ON/OFF logs
 
-now = datetime.datetime.now()
+if Debug == True: #LOG start script
+    old_stdout = sys.stdout
+    log_file = open("/home/pi/ASU/logs/ASU.log","a")
+    sys.stdout = log_file
 
+now = datetime.datetime.now()#Define Variabelfor Datetime
 
-GPIO.setwarnings(False)
+GPIO.setwarnings(False)#Enable/Disable GPIO warnings
 
-#PIN Occupancy model, GPIO numbering
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM) #PIN Occupancy model, GPIO numbering
 
-#Define PIN 21 as IN GPIO (Lightsensor)
-GPIO.setup(21, GPIO.IN)
-#Define PIN 27 as IN GPIO (Stop button)
-GPIO.setup(27, GPIO.IN)
-
-#Define PIN 17 as OUT GPIO (Servomotor)
-GPIO.setup(17, GPIO.OUT)
-#Define Name and PWM (50Hz)for PIN 17,
-servo = GPIO.PWM(17,50)
-
-#Define PIN 23 as OUT GPIO (LED green)
-GPIO.setup(23, GPIO.OUT)
+GPIO.setup(21, GPIO.IN) #Define PIN 21 as IN GPIO (Lightsensor)
+GPIO.setup(27, GPIO.IN) #Define PIN 27 as IN GPIO (Stop button)
+GPIO.setup(17, GPIO.OUT)#Define PIN 17 as OUT GPIO (Servomotor)
+servo = GPIO.PWM(17,50)#Define Name and PWM (50Hz)for PIN 17
+GPIO.setup(23, GPIO.OUT) #Define PIN 23 as OUT GPIO (LED green)
 GPIO.output(23, GPIO.HIGH)
 GPIO.output(23, GPIO.LOW)
-#Define PIN 24 as OUT GPIO (LED yellow)
-GPIO.setup(24, GPIO.OUT)
+GPIO.setup(24, GPIO.OUT) #Define PIN 24 as OUT GPIO (LED yellow)
 GPIO.output(24, GPIO.HIGH)
 GPIO.output(24, GPIO.LOW)
-#Define PIN 25 as OUT GPIO (LED red)
-GPIO.setup(25, GPIO.OUT)
+GPIO.setup(25, GPIO.OUT) #Define PIN 25 as OUT GPIO (LED red)
 GPIO.output(25, GPIO.HIGH)
 GPIO.output(25, GPIO.LOW)
-
-#Define GPIO 11 as OUT GPIO (Relay SIM-Card reader)
-GPIO.setup(11, GPIO.OUT)
+GPIO.setup(11, GPIO.OUT) #Define GPIO 11 as OUT GPIO (Relay SIM-Card reader)
 GPIO.output(11, GPIO.HIGH)
 GPIO.output(11, GPIO.LOW)
-
 
 class motor:
     @staticmethod
@@ -64,7 +53,7 @@ class motor:
         servo.start(12.5) # Initialisierung
         time.sleep(2.5)
         print ("Set Servo to 108 degrees (Slider in tray)")
-        servo.ChangeDutyCycle(8.5)
+        servo.ChangeDutyCycle(8.0)
         time.sleep(2.5)
         print ("Turning back to 180 degrees (Slider out of tray)")
         servo.ChangeDutyCycle(12.5)
@@ -113,8 +102,8 @@ class email:
     def withsim():
         print("Send E-Mail with Update List")
         #Send Email with SIM
-        fromaddr = "senderEMAIL"
-        toaddr = "empfängerEMAIL"
+        fromaddr = "emailsend"
+        toaddr = "emailrecieve"
         # instance of MIMEMultipart 
         msg = MIMEMultipart() 
         # storing the senders email address   
@@ -144,7 +133,7 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "passwort") 
+        s.login(fromaddr, "passsword") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
@@ -153,9 +142,9 @@ class email:
     def withoutsim():
         #Send Email without SIM
         print ("Send Email - no SIM in tray")
-        smtpUser = 'senderEMAIL'
-        smtpPass = 'Passwort'
-        toAdd = 'empfängerEMAIL'
+        smtpUser = 'emailsend'
+        smtpPass = 'password'
+        toAdd = 'emailrecieve'
         fromAdd = smtpUser
         subject = 'ASU - INFO'
         header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
@@ -169,8 +158,8 @@ class email:
     def handstop():
         print("Send E-Mail with Update List")
         #Send Email with SIM
-        fromaddr = "senderEMAIL"
-        toaddr = "empfägerEMAIL"
+        fromaddr = "sendemail"
+        toaddr = "revcieveemail"
         # instance of MIMEMultipart 
         msg = MIMEMultipart() 
         # storing the senders email address   
@@ -200,7 +189,7 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "Passwort") 
+        s.login(fromaddr, "password") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
@@ -209,7 +198,7 @@ class email:
 class rest:
     @staticmethod
     def post():
-        #Rest call als neue Klasse definieren
+        #Rest Post from Postman
         print ("Rest Post send")
         now = datetime.datetime.now()
         print (now.strftime("%Y-%m-%d %H:%M:%S"), file=open('Update_list.txt', 'a'))
@@ -239,7 +228,7 @@ class file:
           os.remove("Update_list.txt")
         else:
           print("The Update_list file does not exist")
-    
+
 	
 if GPIO.input(21) == 1:
     print (now.strftime("%Y-%m-%d %H:%M:%S"))
@@ -272,8 +261,8 @@ if GPIO.input(21) == 1:
             dark = False
             
         else:
-            print ("All SIM-Cards ejected from tray")
             print (now.strftime("%Y-%m-%d %H:%M:%S"))
+            print ("All SIM-Cards ejected from tray")
             led.yellow_on()
             email.withsim()
             time.sleep(3)
@@ -283,8 +272,8 @@ if GPIO.input(21) == 1:
             motor.stop()
             dark = False
 else:
-    print ("No SIM-Card in tray")
     print (now.strftime("%Y-%m-%d %H:%M:%S"))
+    print ("No SIM-Card in tray")
     led.red_on()
     time.sleep(3)
     led.yellow_on()
@@ -294,6 +283,7 @@ else:
     led.yellow_off()
     GPIO.cleanup()
         
-    
-#sys.stdout = old_stdout
-#log_file.close()
+#Stop LOG Script
+if Debug == True:  
+    sys.stdout = old_stdout
+    log_file.close()
