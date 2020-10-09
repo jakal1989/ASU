@@ -13,35 +13,36 @@ import sys
 import os
 import datetime
 
-Debug = False #Turn ON/OFF logs
-
-if Debug == True: #LOG start script
+#Turn ON/OFF logs
+Debug = False 
+#LOG start script
+if Debug == True: 
     old_stdout = sys.stdout
     log_file = open("/home/pi/ASU/logs/ASU.log","a")
     sys.stdout = log_file
-
-now = datetime.datetime.now()#Define Variabelfor Datetime
+    
+#Define Variabelfor Datetime
+now = datetime.datetime.now()
 
 GPIO.setwarnings(False)#Enable/Disable GPIO warnings
-
-GPIO.setmode(GPIO.BCM) #PIN Occupancy model, GPIO numbering
-
-GPIO.setup(21, GPIO.IN) #Define PIN 21 as IN GPIO (Lightsensor)
-GPIO.setup(27, GPIO.IN) #Define PIN 27 as IN GPIO (Stop button)
-GPIO.setup(17, GPIO.OUT)#Define PIN 17 as OUT GPIO (Servomotor)
-servo = GPIO.PWM(17,50)#Define Name and PWM (50Hz)for PIN 17
-GPIO.setup(23, GPIO.OUT) #Define PIN 23 as OUT GPIO (LED green)
-GPIO.output(23, GPIO.HIGH)
-GPIO.output(23, GPIO.LOW)
-GPIO.setup(24, GPIO.OUT) #Define PIN 24 as OUT GPIO (LED yellow)
-GPIO.output(24, GPIO.HIGH)
-GPIO.output(24, GPIO.LOW)
-GPIO.setup(25, GPIO.OUT) #Define PIN 25 as OUT GPIO (LED red)
-GPIO.output(25, GPIO.HIGH)
-GPIO.output(25, GPIO.LOW)
-GPIO.setup(11, GPIO.OUT) #Define GPIO 11 as OUT GPIO (Relay SIM-Card reader)
-GPIO.output(11, GPIO.HIGH)
-GPIO.output(11, GPIO.LOW)
+#PIN Occupancy model, GPIO numbering
+GPIO.setmode(GPIO.BCM) 
+#Define PIN 21 as IN GPIO (Lightsensor)
+GPIO.setup(21, GPIO.IN) 
+#Define PIN 27 as IN GPIO (Stop button)
+GPIO.setup(27, GPIO.IN) 
+#Define PIN 17 as OUT GPIO (Servomotor)
+GPIO.setup(17, GPIO.OUT)
+#Define Name and PWM (50Hz)for PIN 17
+servo = GPIO.PWM(17,50)
+#Define PIN 23 as OUT GPIO (LED green)
+GPIO.setup(23, GPIO.OUT)
+#Define PIN 24 as OUT GPIO (LED yellow)
+GPIO.setup(24, GPIO.OUT) 
+#Define PIN 25 as OUT GPIO (LED red)
+GPIO.setup(25, GPIO.OUT) 
+#Define GPIO 11 as OUT GPIO (Relay SIM-Card reader)
+GPIO.setup(11, GPIO.OUT)
 
 class motor:
     @staticmethod
@@ -102,8 +103,8 @@ class email:
     def withsim():
         print("Send E-Mail with Update List")
         #Send Email with SIM
-        fromaddr = "emailsend"
-        toaddr = "emailrecieve"
+        fromaddr = "asu.swisscom@gmail.com"
+        toaddr = "stefano.cugis@gmail.com"
         # instance of MIMEMultipart 
         msg = MIMEMultipart() 
         # storing the senders email address   
@@ -133,7 +134,7 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "passsword") 
+        s.login(fromaddr, "Swissc0m") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
@@ -142,9 +143,9 @@ class email:
     def withoutsim():
         #Send Email without SIM
         print ("Send Email - no SIM in tray")
-        smtpUser = 'emailsend'
-        smtpPass = 'password'
-        toAdd = 'emailrecieve'
+        smtpUser = 'asu.swisscom@gmail.com'
+        smtpPass = 'Swissc0m'
+        toAdd = 'stefano.cugis@gmail.com'
         fromAdd = smtpUser
         subject = 'ASU - INFO'
         header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
@@ -158,8 +159,8 @@ class email:
     def handstop():
         print("Send E-Mail with Update List")
         #Send Email with SIM
-        fromaddr = "sendemail"
-        toaddr = "revcieveemail"
+        fromaddr = "asu.swisscom@gmail.com"
+        toaddr = "stefano.cugis@gmail.com"
         # instance of MIMEMultipart 
         msg = MIMEMultipart() 
         # storing the senders email address   
@@ -189,7 +190,7 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "password") 
+        s.login(fromaddr, "Swissc0m") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
@@ -274,6 +275,7 @@ if GPIO.input(21) == 1:
 else:
     print (now.strftime("%Y-%m-%d %H:%M:%S"))
     print ("No SIM-Card in tray")
+    motor.positioncheck()
     led.red_on()
     time.sleep(3)
     led.yellow_on()
@@ -281,7 +283,7 @@ else:
     time.sleep(3)
     led.red_off()
     led.yellow_off()
-    GPIO.cleanup()
+    motor.stop()
         
 #Stop LOG Script
 if Debug == True:  
