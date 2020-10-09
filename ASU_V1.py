@@ -134,7 +134,7 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "Swissc0m") 
+        s.login(fromaddr, "Password") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
@@ -144,7 +144,7 @@ class email:
         #Send Email without SIM
         print ("Send Email - no SIM in tray")
         smtpUser = 'asu.swisscom@gmail.com'
-        smtpPass = 'Swissc0m'
+        smtpPass = 'Password'
         toAdd = 'stefano.cugis@gmail.com'
         fromAdd = smtpUser
         subject = 'ASU - INFO'
@@ -190,7 +190,7 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "Swissc0m") 
+        s.login(fromaddr, "Password") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
