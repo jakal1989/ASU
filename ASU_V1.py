@@ -113,6 +113,7 @@ class email:
         #Send Email with SIM
         fromaddr = "asu.swisscom@gmail.com"
         toaddr = "stefano.cugis@gmail.com"
+        smtppass = 'password'
         # instance of MIMEMultipart 
         msg = MIMEMultipart() 
         # storing the senders email address   
@@ -142,7 +143,7 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "password") 
+        s.login(fromaddr, smtppass) 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
@@ -153,56 +154,41 @@ class email:
         #Send Email with SIM
         fromaddr = "asu.swisscom@gmail.com"
         toaddr = "stefano.cugis@gmail.com"
-        # instance of MIMEMultipart 
-        msg = MIMEMultipart() 
-        # storing the senders email address   
-        msg['From'] = fromaddr 
-        # storing the receivers email address  
-        msg['To'] = toaddr 
-        # storing the subject  
+        smtppass = 'password'
+        msg = MIMEMultipart()  
+        msg['From'] = fromaddr   
+        msg['To'] = toaddr   
         msg['Subject'] = "ASU - ERROR"
-        # string to store the body of the mail 
         body = "Automatic SIM-Card Updater stoped by Hand"
-        # attach the body with the msg instance 
         msg.attach(MIMEText(body, 'plain')) 
-        # open the file to be sent
         filename = "Update_list.txt"
         attachment = open("Update_list.txt", "rb")
-        # instance of MIMEBase and named as p
         p = MIMEBase('application', 'octet-stream')
-        # To change the payload into encoded form 
         p.set_payload((attachment).read())
-        # encode into base64 
         encoders.encode_base64(p) 
         p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
-        # attach the instance 'p' to instance 'msg' 
         msg.attach(p) 
-        # creates SMTP session 
-        s = smtplib.SMTP('smtp.gmail.com', 587) 
-        # start TLS for security 
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.ehlo()
         s.starttls() 
-        # Authentication 
-        s.login(fromaddr, "password") 
-        # Converts the Multipart msg into a string 
-        text = msg.as_string() 
-        # sending the mail 
+        s.login(fromaddr, smtppass) 
+        text = msg.as_string()
         s.sendmail(fromaddr, toaddr, text)
     @staticmethod
     def withoutsim():
         #Send Email without SIM
         print ("Send Email - no SIM in tray")
-        smtpUser = 'asu.swisscom@gmail.com'
-        smtpPass = 'Swissc0m'
-        toAdd = 'stefano.cugis@gmail.com'
-        fromAdd = smtpUser
+        fromaddr = 'asu.swisscom@gmail.com'
+        toaddr = 'stefano.cugis@gmail.com'
+        smtpPass = 'password'
         subject = 'ASU - INFO'
-        header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
+        header = 'To: ' + toaddr + '\n' + 'From: ' + fromaddr + '\n' + 'Subject: ' + subject
         body = 'No SIM in tray'
         s = smtplib.SMTP('smtp.gmail.com',587)
         s.ehlo()
         s.starttls()
-        s.login(smtpUser, smtpPass)
-        s.sendmail(fromAdd, toAdd, header + '\n\n' + body)
+        s.login(fromaddr, smtpPass)
+        s.sendmail(fromaddr, toaddr, header + '\n\n' + body)
     
 class rest:
     @staticmethod
@@ -239,7 +225,7 @@ class file:
           print("The Update_list file does not exist")
 
 ################################################################################
-#Program
+# Program
 
 if GPIO.input(21) == 1:
     print (now.strftime("%Y-%m-%d %H:%M:%S"))
