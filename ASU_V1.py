@@ -24,7 +24,12 @@ if Debug == True:
 #Define Variabelfor Datetime
 now = datetime.datetime.now()
 
-GPIO.setwarnings(False)#Enable/Disable GPIO warnings
+
+################################################################################
+#initiate GPIO Pins
+
+#Enable/Disable GPIO warnings
+GPIO.setwarnings(False)
 #PIN Occupancy model, GPIO numbering
 GPIO.setmode(GPIO.BCM) 
 #Define PIN 21 as IN GPIO (Lightsensor)
@@ -43,6 +48,9 @@ GPIO.setup(24, GPIO.OUT)
 GPIO.setup(25, GPIO.OUT) 
 #Define GPIO 11 as OUT GPIO (Relay SIM-Card reader)
 GPIO.setup(11, GPIO.OUT)
+
+################################################################################
+#Classes for Interfaces
 
 class motor:
     @staticmethod
@@ -134,27 +142,11 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "Password") 
+        s.login(fromaddr, "password") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
         s.sendmail(fromaddr, toaddr, text)
-    @staticmethod
-    def withoutsim():
-        #Send Email without SIM
-        print ("Send Email - no SIM in tray")
-        smtpUser = 'asu.swisscom@gmail.com'
-        smtpPass = 'Password'
-        toAdd = 'stefano.cugis@gmail.com'
-        fromAdd = smtpUser
-        subject = 'ASU - INFO'
-        header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
-        body = 'No SIM in tray'
-        s = smtplib.SMTP('smtp.gmail.com',587)
-        s.ehlo()
-        s.starttls()
-        s.login(smtpUser, smtpPass)
-        s.sendmail(fromAdd, toAdd, header + '\n\n' + body)
     @staticmethod
     def handstop():
         print("Send E-Mail with Update List")
@@ -190,11 +182,27 @@ class email:
         # start TLS for security 
         s.starttls() 
         # Authentication 
-        s.login(fromaddr, "Password") 
+        s.login(fromaddr, "password") 
         # Converts the Multipart msg into a string 
         text = msg.as_string() 
         # sending the mail 
         s.sendmail(fromaddr, toaddr, text)
+    @staticmethod
+    def withoutsim():
+        #Send Email without SIM
+        print ("Send Email - no SIM in tray")
+        smtpUser = 'asu.swisscom@gmail.com'
+        smtpPass = 'Swissc0m'
+        toAdd = 'stefano.cugis@gmail.com'
+        fromAdd = smtpUser
+        subject = 'ASU - INFO'
+        header = 'To: ' + toAdd + '\n' + 'From: ' + fromAdd + '\n' + 'Subject: ' + subject
+        body = 'No SIM in tray'
+        s = smtplib.SMTP('smtp.gmail.com',587)
+        s.ehlo()
+        s.starttls()
+        s.login(smtpUser, smtpPass)
+        s.sendmail(fromAdd, toAdd, header + '\n\n' + body)
     
 class rest:
     @staticmethod
@@ -230,7 +238,9 @@ class file:
         else:
           print("The Update_list file does not exist")
 
-	
+################################################################################
+#Program
+
 if GPIO.input(21) == 1:
     print (now.strftime("%Y-%m-%d %H:%M:%S"))
     motor.positioncheck()
