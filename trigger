@@ -1,39 +1,18 @@
 #!/bin/bash
 
-# Logging arguments
-# -l oder --log -> Logging on
-DEBUG="1"
-
-if [ "$1" == "--log" ] || [ "$1" == "-l" ]
-then
-  DEBUG="1"
-  echo $DEBUG
-fi
-
 #set path variable
 CURDIR=$(pwd)
 HOMEDIR=/home/pi/ASU
 LOGFILE=$HOMEDIR/logs/trigger.log
 
-# create log file if it does not exist
-if [ "$DEBUG" == "1" ]
-then
-  touch $LOGFILE
-  #date +%r-%-d/%-m/%-y >> $LOGFILE
-  date +"%d.%m.%Y %T" >> $LOGFILE
-fi
-
 # define Pin as Input
-if [ "$DEBUG" == "1" ]
-then
-echo "Define GPIO" | tee -a $LOGFILE 
-fi
+echo "Define GPIO"
 echo "19" > /sys/class/gpio/export
 echo "in" > /sys/class/gpio/gpio19/direction
 
 # Read Input 
 previous=$(cat /sys/class/gpio/gpio19/value)
-echo "Read Input" | tee -a $LOGFILE 
+echo "Read Input" 
 
 # Loop
 while true
@@ -43,15 +22,13 @@ do
 
   # Wenn der Eingang von 0 auf 1 gewechselt hat
   if [ $pin -gt $previous ]
-  then
-    # Start Automatic SIM Updater
-    echo "Trigger pessed ASU" | tee -a $LOGFILE 
-    sudo python3 $HOMEDIR/ASU_V1.py
+  then 
+    echo "Knopf wurde gedrückt"
+    sudo python3 $HOMEDIR/main.py
   else
     # Eine halbe Sekunde schlafen, damit der Prozessor nicht heissläuft
     sleep 0.5
   fi
-
   # Der aktuelle Wert wird der alte Wert für den nächsten Durchlauf
   previous=$pin
 done
