@@ -1,33 +1,32 @@
-#Import diffrent libraries
-import datetime
-import sys
-import time
-
+# Importieren von verschidenen Bibliotheken
 import RPi.GPIO as GPIO
+import time
+import sys
+import datetime
 
-#Turn ON/OFF logs
-Debug = False 
-#LOG start script
+# Logs Ein-/Aus-schalten
+Debug = False
+# Log Start Skript: Logdatei anlegen Konsole Ausgabe in Datei schreiben mit mit Anhäng-Modus (Append)
 if Debug == True: 
     old_stdout = sys.stdout
     log_file = open("/home/pi/ASU/logs/ASU.log","a")
     sys.stdout = log_file
     
-#Define Variabelfor Datetime
+# Instanziere Zeitstempel
 now = datetime.datetime.now()
 
-#disable warnings when Pin is already in use
+# Schalte Warnungen aus wenn PIN schon in gebrauch ist
 GPIO.setwarnings(False)
 
-#referring to the pins by the "Broadcom SOC channel"
+# Benutzung von "Broadcom SOC channel" PIN-Schema
 GPIO.setmode(GPIO.BCM)
 
-#Define PIN 21 as IN GPIO (Lightsensor)
+# Definiere PIN 21 als Eingang GPIO (Lichtsensor)
 GPIO.setup(21, GPIO.IN) 
-#Define PIN 27 as IN GPIO (Stop button)
+# Definiere PIN 27 als Eingang GPIO (Stopp Knopf)
 GPIO.setup(27, GPIO.IN) 
 
-#import Classes
+# importiere Klassen
 from led import Led
 from motor import Motor
 from mail import Mail
@@ -36,15 +35,18 @@ from sim import Sim
 from file import File
 	
 ################################################################################
-# Program
+# Programm, die genauen beschreibungen der Methoden findet man in den Klassen
 
 if GPIO.input(21) == 1:
+    # Zeitstempel in Konsole ausgeben
     print (now.strftime("%Y-%m-%d %H:%M:%S"))
     Motor.position_check()
     File.delete()
+    # Boolesche gleichung dark auf True stellen
     dark = True
-    #Loop
+    # Schlaufe reagiert auf die Boolesche gleichung dark = True
     while dark:
+        # Wenn Lichtsenosr Dunkel erkennt und Stopp Taster nicht gedrückt wird dieser weg eingeschlagen 
         if GPIO.input(21) == 1 and GPIO.input(27) == 0:
             print (now.strftime("%Y-%m-%d %H:%M:%S"))
             Led.green_on()
@@ -53,7 +55,7 @@ if GPIO.input(21) == 1:
             Sim.read_on()
             Rest.post()
             Motor.run()
-            
+        # Wenn Lichtsenosr Dunkel erkennt und Stopp Taster gedrückt wird dieser weg eingeschlage    
         elif GPIO.input(21) == 1 and GPIO.input(27) == 1:
             print (now.strftime("%Y-%m-%d %H:%M:%S"))
             print ("stoped by hand")
@@ -66,18 +68,22 @@ if GPIO.input(21) == 1:
             Led.yellow_off()
             File.delete()
             Motor.stop()
+            # Boolesche gleichung Dark auf False stellen um aus der schlaufe zu gehen
             dark = False
-            
+        # Wenn Lichtsenosr Hell erkennt und Stopp Taster nicht gedrückt wird dieser weg eingeschlage    
         else:
             print (now.strftime("%Y-%m-%d %H:%M:%S"))
+            Led.green_off()
+            Led.red_on()
             print ("All SIM-Cards ejected from tray")
             Led.yellow_on()
             Mail.with_sim()
             time.sleep(3)
-            Led.green_off()
+            Led.red_off()
             Led.yellow_off()
             File.delete()
             Motor.stop()
+            # Boolesche gleichung Dark auf False stellen um aus der schlaufe zu gehen
             dark = False
 else:
     print (now.strftime("%Y-%m-%d %H:%M:%S"))
@@ -92,7 +98,7 @@ else:
     Led.yellow_off()
     Motor.stop()
         
-#Stop LOG Script
+# Beende das Logscript.
 if Debug == True:  
     sys.stdout = old_stdout
     log_file.close()
