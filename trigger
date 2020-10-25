@@ -1,32 +1,31 @@
 #!/bin/bash
 
-#set path variable
+# Pfadvariablen setzen
 CURDIR=$(pwd)
 HOMEDIR=/home/pi/ASU
-LOGFILE=$HOMEDIR/logs/trigger.log
 
-# define Pin as Input
+# Definiere PIN 19 als Eingang
 echo "Define GPIO"
 echo "19" > /sys/class/gpio/export
 echo "in" > /sys/class/gpio/gpio19/direction
 
-# Read Input 
+# Lese Eingang 
 previous=$(cat /sys/class/gpio/gpio19/value)
 echo "Read Input" 
 
-# Loop
+# Schlaufe ausführen um Eingang auszulesen
 while true
 do
   # Den Zustand des Eingangs lesen
   pin=$(cat /sys/class/gpio/gpio19/value)
 
-  # Wenn der Eingang von 0 auf 1 gewechselt hat
+  # Wenn der Eingangszustand wechselt Python Programm starten
   if [ $pin -gt $previous ]
   then 
     echo "Knopf wurde gedrückt"
     sudo python3 $HOMEDIR/main.py
+  # Ansonsten eine halbe Sekunde warten und Schlaufe von vorne beginne.
   else
-    # Eine halbe Sekunde schlafen, damit der Prozessor nicht heissläuft
     sleep 0.5
   fi
   # Der aktuelle Wert wird der alte Wert für den nächsten Durchlauf
