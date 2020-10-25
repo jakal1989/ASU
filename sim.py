@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #Importieren von verschidenen Bibliotheken
 import RPi.GPIO as GPIO
 import time
