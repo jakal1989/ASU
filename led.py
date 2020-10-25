@@ -1,22 +1,29 @@
+#Importiere Bibliothek
 import RPi.GPIO as GPIO
 
+#Benutzung von "Broadcom SOC channel" PIN-Schema
 GPIO.setmode(GPIO.BCM)
-#Define PIN 23 as OUT GPIO (LED green)
+#Definiere PIN 23 als Ausgang GPIO (Led Grün)
 GPIO.setup(23, GPIO.OUT)
-#Define PIN 24 as OUT GPIO (LED yellow)
+#Definiere PIN 24 als Ausgang GPIO (Led Gelb)
 GPIO.setup(24, GPIO.OUT)
-#Define PIN 25 as OUT GPIO (LED red)
+#Definiere PIN 25 als Ausgang GPIO (Led Rot)
 GPIO.setup(25, GPIO.OUT)
 
+# Nur Zwei Methoden wurde beschrieben da die restlichen gleich aufgebaut sind
+# Klasse Namens Led definieren
 class Led:
-    # Class to turn on and off notification led
+    # Statische Methode Namens green_on() definieren
     @staticmethod
     def green_on():
         print ("Led green on")
+        # Grüne Led einschalten
         GPIO.output(23, GPIO.HIGH)
+    # Statische Methode Namens green_off() definieren
     @staticmethod    
     def green_off():
         print ("Led green off")
+        # Grüne Led ausschalten
         GPIO.output(23, GPIO.LOW)
     @staticmethod    
     def yellow_on():
