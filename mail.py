@@ -1,58 +1,64 @@
+#Importieren von verschidenen Bibliotheken
 import smtplib 
 from email.mime.multipart import MIMEMultipart 
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders
 
+# Klasse Namens Mail definieren
 class Mail:
+    # Statische Methode Namens with_sim() definieren
     @staticmethod
     def with_sim():
-        #Send Email with Update_list.txt and update finished message
+        # Send Email with Update_list.txt and update finished message
         print("Send E-Mail - with Update List (Update finished)")
+        # Senderadresse definieren
         fromaddr = "asu.swisscom@gmail.com"
+        # Empfänger Adresse definieren
         toaddr = "stefano.cugis@gmail.com"
-        smtppass = 'password'
-        # instance of MIMEMultipart 
+        # Passwort für Login bei Senderadresse
+        smtppass = 'Swissc0m'
+        # instanzieren von MIMEMultipart und benne sie 'msg'
         msg = MIMEMultipart() 
-        # storing the senders email address   
+        # speichern der Senderadresse  
         msg['From'] = fromaddr 
-        # storing the receivers email address  
+        # speichern der Empfängeradresse  
         msg['To'] = toaddr 
-        # storing the subject  
+        # Betreff speichern 
         msg['Subject'] = "ASU - INFO"
-        # string to store the body of the mail 
+        # Nachricht der E-Mail 
         body = "Automatic SIM Update Finished"
-        # attach the body with the msg instance 
+        # Füge die Nachricht der 'msg' Instanz hinzu 
         msg.attach(MIMEText(body, 'plain')) 
-        # open the file to be sent
+        # Öffne Update_list.txt
         filename = "Update_list.txt"
         attachment = open("Update_list.txt", "rb")
-        # instance of MIMEBase and named as p
+        # instanzieren von MIMEBase und bennene sie 'p'
         p = MIMEBase('application', 'octet-stream')
-        # To change the payload into encoded form 
+        # Nutzdaten in eine codierte Form ändern
         p.set_payload((attachment).read())
-        # encode into base64 
-        encoders.encode_base64(p) 
+        # in base64 codierenen
+        encoders.encode_base64(p)
+        # Füge Header in Email mit Filemname und Dateianhang
         p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
-        # attach the instance 'p' to instance 'msg' 
+        # Füge die instanz 'p' der Instanz'msg' hinzu 
         msg.attach(p) 
-        # creates SMTP session 
+        # SMTP-Sitzung erstellen
         s = smtplib.SMTP('smtp.gmail.com', 587) 
-        # start TLS for security 
+        # sStarte TLS verschlüsselung 
         s.starttls() 
-        # Authentication 
+        # Authentifizierung (Login) 
         s.login(fromaddr, smtppass) 
-        # Converts the Multipart msg into a string 
+        # Konvertiert die mehrteilige Nachricht in eine Zeichenfolge
         text = msg.as_string() 
-        # sending the mail 
+        # Email senden 
         s.sendmail(fromaddr, toaddr, text)
     @staticmethod
     def hand_stop():
-        #Send Email with Update_list.txt and Handstop message
         print("Send E-Mail - with Update List (Handstop)")
         fromaddr = "asu.swisscom@gmail.com"
         toaddr = "stefano.cugis@gmail.com"
-        smtppass = 'password'
+        smtppass = 'Swissc0m'
         msg = MIMEMultipart()  
         msg['From'] = fromaddr   
         msg['To'] = toaddr   
@@ -67,24 +73,20 @@ class Mail:
         p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
         msg.attach(p) 
         s = smtplib.SMTP('smtp.gmail.com', 587)
-        s.ehlo()
         s.starttls() 
         s.login(fromaddr, smtppass) 
         text = msg.as_string()
         s.sendmail(fromaddr, toaddr, text)
     @staticmethod
     def without_sim():
-        #Send Email without SIM
         print ("Send Email - no SIM in tray")
         fromaddr = 'asu.swisscom@gmail.com'
         toaddr = 'stefano.cugis@gmail.com'
-        smtppass = 'password'
+        smtppass = 'Swissc0m'
         subject = 'ASU - INFO'
         header = 'To: ' + toaddr + '\n' + 'From: ' + fromaddr + '\n' + 'Subject: ' + subject
         body = 'No SIM in tray'
         s = smtplib.SMTP('smtp.gmail.com', 587)
-        s.ehlo()
         s.starttls()
         s.login(fromaddr, smtppass)
         s.sendmail(fromaddr, toaddr, header + '\n\n' + body)
-    
