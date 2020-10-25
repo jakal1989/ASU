@@ -4,22 +4,22 @@ import RPi.GPIO as GPIO
 import time
 import os
 
-#disable warnings when Pin is already in use
+# Schalte Warnungen aus wenn PIN schon in gebrauch ist
 GPIO.setwarnings(False)
 
-#referring to the pins by the "Broadcom SOC channel"
+# Benutzung von "Broadcom SOC channel" PIN-Schema
 GPIO.setmode(GPIO.BCM)
 
-#Define PIN 21 as IN GPIO (Lightsensor)
+# Definiere PIN 19 als Eingang GPIO (Start Knopf)
 GPIO.setup(19, GPIO.IN)
 
-#Starte Schlaufe zum auslesen des PINs
+# Starte Schlaufe zum auslesen des PINs
 while True:
-    #Wenn Taster gedrückt wird
+    # Wenn Taster gedrückt wird
     if GPIO.input(19) == 1:
-        #Starten von main Programm in Terminal
+        # Starten von main Programm in Terminal
         os.system("sudo python3 /home/pi/ASU/main.py")
-    #Wenn Taster nicht gedrückt wird    
+    # Wenn Taster nicht gedrückt wird    
     else:
-        #Pause definieren um den Prozess nicht heisslaufen zu lassen
+        # Ansonsten eine halbe Sekunde warten und Schlaufe von vorne beginne.
         time.sleep(0.5)
