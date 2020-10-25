@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #Importiere Bibliothek
 import RPi.GPIO as GPIO
 
