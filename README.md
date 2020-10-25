@@ -40,7 +40,7 @@ Um das hier geschriebene Programm nutzen zu können müssen noch einige Anforder
     
     ```/home/pi/ASU/trigger &```
     
-6.  ASU_V1.py mit texeditor öffnen und Email Absender mit dazugeörigem SMTP server definieren. 
+6.  mail.py mit texeditor öffnen und Email Absender mit dazugeörigem SMTP server definieren. 
     Sowie empfänger definieren.
 
 7.  Anschliessen von Kabel an GPIOs
