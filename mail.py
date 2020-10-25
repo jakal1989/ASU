@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #Importieren von verschidenen Bibliotheken
 import smtplib 
 from email.mime.multipart import MIMEMultipart 
