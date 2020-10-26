@@ -11,14 +11,13 @@ class Mail:
     # Statische Methode Namens with_sim() definieren
     @staticmethod
     def with_sim():
-        # Send Email with Update_list.txt and update finished message
         print("Send E-Mail - with Update List (Update finished)")
         # Senderadresse definieren
         fromaddr = "asu.swisscom@gmail.com"
         # Empfänger Adresse definieren
         toaddr = "stefano.cugis@gmail.com"
         # Passwort für Login bei Senderadresse
-        smtppass = 'Swissc0m'
+        smtppass = 'password'
         # instanzieren von MIMEMultipart und benne sie 'msg'
         msg = MIMEMultipart() 
         # speichern der Senderadresse  
@@ -59,7 +58,7 @@ class Mail:
         print("Send E-Mail - with Update List (Handstop)")
         fromaddr = "asu.swisscom@gmail.com"
         toaddr = "stefano.cugis@gmail.com"
-        smtppass = 'Swissc0m'
+        smtppass = 'password'
         msg = MIMEMultipart()  
         msg['From'] = fromaddr   
         msg['To'] = toaddr   
@@ -83,7 +82,7 @@ class Mail:
         print ("Send Email - no SIM in tray")
         fromaddr = 'asu.swisscom@gmail.com'
         toaddr = 'stefano.cugis@gmail.com'
-        smtppass = 'Swissc0m'
+        smtppass = 'password'
         subject = 'ASU - INFO'
         header = 'To: ' + toaddr + '\n' + 'From: ' + fromaddr + '\n' + 'Subject: ' + subject
         body = 'No SIM in tray'
