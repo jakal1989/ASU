@@ -17,6 +17,8 @@ class Motor:
     @staticmethod
     def run():
         print ("Set Servo to 180 degrees (Slider out of tray)")
+        # Warte 2.5 Sekunden
+        time.sleep(2.5)
         # Initialisierung setzte den Motor auf 180 Grad
         servo.start(12.5)
         # Warte 2.5 Sekunden
@@ -35,6 +37,8 @@ class Motor:
     @staticmethod
     def position_check():
         print ("Set Servo to 180 degrees (Check if Servo is out of tray)")
+        # Warte 2.5 Sekunden
+        time.sleep(2.5)
         # Initialisierung setzte den Motor auf 180 Grad
         servo.start(12.5)
         # Warte 2.5 Sekunden
