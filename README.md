@@ -1,10 +1,10 @@
 # ASU
 Automatic Sim-Card Updater
 
-Das Tool wird verwendet um ein Servomotor zu steuern, der Automtisch eine SIMKarte aus einem ablagefach auswirft.
-Hierbei wird ein Taster als starter des Programms verwendet sowie ein Lichtsensor welcher erkennt ob eine SIM-Karte im Fach ist.
+Das Tool wird verwendet um ein Servomotor zu steuern, der automatisch eine SIM-Karte aus einem Ablagefach auswirft.
+Hierbei wird ein Taster als starter des Programms verwendet, sowie ein Lichtsensor welcher erkennt ob eine SIM-Karte im Ablagefach ist.
 
-Um das hier geschriebene Programm nutzen zu können müssen noch einige Anforderungen erfült werden.
+Um das hier geschriebene Programm nutzen zu können müssen noch einige Anforderungen erfüllt werden.
 
 1.  Benötigte Hardware 
 
@@ -40,8 +40,8 @@ Um das hier geschriebene Programm nutzen zu können müssen noch einige Anforder
     
     ```/home/pi/ASU/trigger &```
     
-6.  mail.py mit texeditor öffnen und Email Absender mit dazugeörigem SMTP server definieren. 
-    Sowie empfänger definieren.
+6.  mail.py mit texeditor öffnen und Email Absender mit dazugeörigem SMTP-Server definieren. 
+    Sowie Empfänger definieren.
 
 7.  Anschliessen von Kabel an GPIOs
     
