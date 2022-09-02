@@ -14,9 +14,9 @@ class Mail:
     def with_sim():
         print("Send E-Mail - with Update List (Update finished)")
         # Senderadresse definieren
-        fromaddr = "asu.swisscom@gmail.com"
+        fromaddr = "test@test.com"
         # Empfänger Adresse definieren
-        toaddr = "stefano.cugis@gmail.com"
+        toaddr = "test2@test.com"
         # Passwort für Login bei Senderadresse
         smtppass = 'password'
         # instanzieren von MIMEMultipart und benne sie 'msg'
@@ -57,8 +57,8 @@ class Mail:
     @staticmethod
     def hand_stop():
         print("Send E-Mail - with Update List (Handstop)")
-        fromaddr = "asu.swisscom@gmail.com"
-        toaddr = "stefano.cugis@gmail.com"
+        fromaddr = "test@test.com"
+        toaddr = "test2@test.com"
         smtppass = 'password'
         msg = MIMEMultipart()  
         msg['From'] = fromaddr   
@@ -82,8 +82,8 @@ class Mail:
     #vereinfachte E-Mail ohne Datei Anhang 
     def without_sim():
         print ("Send Email - no SIM in tray")
-        fromaddr = 'asu.swisscom@gmail.com'
-        toaddr = 'stefano.cugis@gmail.com'
+        fromaddr = "test@test.com"
+        toaddr = "test2@test.com"
         smtppass = 'password'
         # Betreff
         subject = 'ASU - INFO'
